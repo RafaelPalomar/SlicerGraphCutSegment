@@ -34,7 +34,7 @@ public:
 
 
     Data3D<LABEL> get_labeling();
-    LABEL what_segment(const Index3D& i);
+    LABEL what_segment(const MyBasic::Index3D& i);
     double maxflow();
 
     inline int getNumSli() const;
@@ -54,7 +54,7 @@ private:
 };
 
 
-int Graph3D::Index2Id(const Index3D& i) const
+int Graph3D::Index2Id(const MyBasic::Index3D& i) const
 {
     return Index2Id(i.sli,i.row,i.col);
 }

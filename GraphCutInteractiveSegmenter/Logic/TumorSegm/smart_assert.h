@@ -20,8 +20,6 @@
 #define SMART_ASSERT_H
 #include <assert.h>
 #include <iostream>
-using namespace std;
-
 #define smart_assert( condition, message ) \
 	if( !(condition) ) { \
 		assert( condition && message ); \

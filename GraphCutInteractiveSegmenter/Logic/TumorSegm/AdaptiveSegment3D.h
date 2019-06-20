@@ -32,7 +32,7 @@ public:
     void addStar3D(MyBasic::Index3D p);
     void addTumorCenter(MyBasic::Index3D p);
     void setSeeds(const Data3D<LABEL>& _seeds);
-    void setAreaRatio(const vector<double>& min_ratio,const vector<double>& max_ratio);
+    void setAreaRatio(const std::vector<double>& min_ratio,const std::vector<double>& max_ratio);
 	void setConfig(bool star2D,bool star3D);
     /////////////////////////////////////////////////////////////////////
     //functions for segmentation
@@ -45,7 +45,7 @@ public:
     //getters
     /////////////////////////////////////////////////////////////////////
     Data3D<LABEL> getLabeling() const;
-    vector<double> getLambda() const;
+    std::vector<double> getLambda() const;
   //  void setSegRegion(MyBasic::Range3D roi);
  //   void setSideStars(MyBasic::Index3D _s1, MyBasic::Index3D _s2);
  //   void setTightBox(MyBasic::Range3D _range);
@@ -70,8 +70,8 @@ private:
     Data3D<double> fgcost;
     Data3D<double> bkcost;
 
-    pair<Data3D<double>,Data3D<double> > smoothCostR; //size equal to the graph
-    pair<Data3D<double>,Data3D<double> > smoothCostC;
+    std::pair<Data3D<double>,Data3D<double> > smoothCostR; //size equal to the graph
+    std::pair<Data3D<double>,Data3D<double> > smoothCostC;
 
     SparseNLink extraSmoothCost; //id in terms of size of graph
     SparseTLink extraDataCost;
@@ -85,14 +85,14 @@ private:
     int mid_slice;
 
     //star shape center and tumor center
-    vector<MyBasic::Index2D> tumor_centers;
-    vector<vector<MyBasic::Index2D> > stars2D;
- //   vector<vector<MyBasic::Index2D> > fgseeds;
-  //  vector<vector<MyBasic::Index2D> > bkseeds;
-    vector<MyBasic::Index3D> stars3D;
+    std::vector<MyBasic::Index2D> tumor_centers;
+    std::vector<std::vector<MyBasic::Index2D> > stars2D;
+ //   std::vector<vector<MyBasic::Index2D> > fgseeds;
+  //  std::vector<vector<MyBasic::Index2D> > bkseeds;
+    std::vector<MyBasic::Index3D> stars3D;
 
-    vector<double> max_area_ratio;
-    vector<double> min_area_ratio;
+    std::vector<double> max_area_ratio;
+    std::vector<double> min_area_ratio;
 
     unsigned int num_iteration;
     //graph for 3D segmentation
@@ -101,7 +101,7 @@ private:
     //result for segmentation
     Data3D<LABEL> labeling;
     //best lambda for each slice
-    vector<double> bestLambda;
+    std::vector<double> bestLambda;
 };
 
 #endif // AdaptiveSegment3D_H_INCLUDED

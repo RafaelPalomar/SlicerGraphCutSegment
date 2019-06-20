@@ -10,13 +10,11 @@
 #include <numeric>
 #include <algorithm>
 
-using namespace std;
-
 //operations for vector
 template<typename T>
-vector<T> operator+(const vector<T>& a, const T& scalar)
+std::vector<T> operator+(const std::vector<T>& a, const T& scalar)
 {
-    vector<T> result(a.size());
+    std::vector<T> result(a.size());
     for(unsigned int i=0; i<a.size(); i++)
         {
             result[i] = a[i] + scalar;
@@ -25,9 +23,9 @@ vector<T> operator+(const vector<T>& a, const T& scalar)
 }
 
 template<typename T>
-vector<T> operator-(const vector<T>& a, const T& scalar)
+std::vector<T> operator-(const std::vector<T>& a, const T& scalar)
 {
-    vector<T> result(a.size());
+    std::vector<T> result(a.size());
     for(unsigned int i=0; i<a.size(); i++)
         {
             result[i] = a[i] - scalar;
@@ -36,9 +34,9 @@ vector<T> operator-(const vector<T>& a, const T& scalar)
 }
 
 template<typename T>
-vector<T> operator-(const vector<T>& a)
+std::vector<T> operator-(const std::vector<T>& a)
 {
-    vector<T> result(a.size());
+    std::vector<T> result(a.size());
     for(unsigned int i=0; i<a.size(); i++)
         {
             result[i] = -a[i];
@@ -47,9 +45,9 @@ vector<T> operator-(const vector<T>& a)
 }
 
 template<typename T>
-vector<T> operator*(const vector<T>& a, const T& scalar)
+std::vector<T> operator*(const std::vector<T>& a, const T& scalar)
 {
-    vector<T> result(a.size());
+    std::vector<T> result(a.size());
     for(unsigned int i=0; i<a.size(); i++)
         {
             result[i] = a[i]*scalar;
@@ -58,10 +56,10 @@ vector<T> operator*(const vector<T>& a, const T& scalar)
 }
 
 template<typename T>
-vector<T> operator/(const vector<T>& a, T dividor)
+std::vector<T> operator/(const std::vector<T>& a, T dividor)
 {
     assert(dividor!=0);
-    vector<T> result(a);
+    std::vector<T> result(a);
     for(int i=0; i<result.size(); i++)
         {
             result[i] = result[i]/dividor;
@@ -71,13 +69,13 @@ vector<T> operator/(const vector<T>& a, T dividor)
 }
 
 template<typename T>
-T min(const vector<T>& a)
+T min(const std::vector<T>& a)
 {
     return *std::min_element(a.begin(),a.end());
 }
 
 template<typename T>
-T max(const vector<T>& a)
+T max(const std::vector<T>& a)
 {
     return *std::max_element(a.begin(),a.end());
 }

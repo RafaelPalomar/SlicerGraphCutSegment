@@ -14,8 +14,6 @@
 #include "vtkSmartPointer.h"
 #include <vector>
 
-using namespace std;
-
 class AppData
 {
 public:

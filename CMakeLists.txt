@@ -4,12 +4,12 @@ project(GraphCutSegment)
 
 #-----------------------------------------------------------------------------
 # Extension meta-information
-set(EXTENSION_HOMEPAGE "http://www.example.com/Slicer/Extensions/GraphCutSegment")
+set(EXTENSION_HOMEPAGE "https://github.com/Slicer/SlicerGraphCutSegment")
 set(EXTENSION_CATEGORY "Segmentation")
-set(EXTENSION_CONTRIBUTORS "Daphne Chen (Western University)")
-set(EXTENSION_DESCRIPTION "This is a segment extension using graph cut algorithm.")
+set(EXTENSION_CONTRIBUTORS "Daphne Chen (Western University), Andras Lasso (PerkLab)")
+set(EXTENSION_DESCRIPTION "Graph cut algorithm based segmentation tool.")
 set(EXTENSION_ICONURL "http://www.example.com/Slicer/Extensions/GraphCutSegment.png")
-set(EXTENSION_SCREENSHOTURLS "http://www.example.com/Slicer/Extensions/GraphCutSegment/Screenshots/1.png")
+set(EXTENSION_SCREENSHOTURLS "https://raw.githubusercontent.com/Slicer/SlicerGraphCutSegment/master/screenshot.png")
 
 #-----------------------------------------------------------------------------
 # Extension dependencies
