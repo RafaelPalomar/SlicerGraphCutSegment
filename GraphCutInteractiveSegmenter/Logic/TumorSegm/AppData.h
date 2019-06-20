@@ -1,11 +1,7 @@
-/**
-Author:
-Liqun Liu (lliu329@uwo.ca)                                   
-Danfeng Chen (dchen285@uwo.ca)  
-
-The code is for research use only.
-Details about the code please refer to README.txt
-**/
+/*==============================================================================
+  Authors include: Liqun Liu (lliu329@uwo.ca), Danfeng Chen (dchen285@uwo.ca)  
+  See README.txt for details.
+==============================================================================*/ 
 
 #ifndef APPDATA_H
 #define APPDATA_H

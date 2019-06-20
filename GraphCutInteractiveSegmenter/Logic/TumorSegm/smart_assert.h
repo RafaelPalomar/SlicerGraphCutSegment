@@ -1,18 +1,11 @@
-/**
-Author:
-Liqun Liu (lliu329@uwo.ca)                                   
-Danfeng Chen (dchen285@uwo.ca)  
-
-The code is for research use only.
-Details about the code please refer to README.txt
-**/
+/*==============================================================================
+  Authors include: Liqun Liu (lliu329@uwo.ca), Danfeng Chen (dchen285@uwo.ca)  
+  See README.txt for details.
+==============================================================================*/ 
 
 /* Smart Assertion
  *  - Show assertion under debug mode
  *  - Print assertion message udner release mode
- *
- * Created by Yuchen on Apr 30th, 2013
- * Last Modified by Yuchen on Jul 2nd, 2013
  *
  * Example:
 	Code:
