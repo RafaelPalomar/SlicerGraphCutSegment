@@ -176,7 +176,7 @@ vtkMRMLAnnotationROINode* vtkSlicerGraphCutInteractiveSegmenterLogic::GetCropROI
 
 int vtkSlicerGraphCutInteractiveSegmenterLogic::checkMarkups(vtkMRMLScalarVolumeNode* input,vtkMRMLMarkupsFiducialNode* markups)
 {
-	cout<<"Checking markups...."<<endl;
+	std::cout<<"Checking markups...."<<std::endl;
 	vtkSmartPointer<vtkMatrix4x4> RASToIJKMatrix = vtkSmartPointer<vtkMatrix4x4>::New();
 	input->GetRASToIJKMatrix(RASToIJKMatrix);
 
@@ -194,11 +194,11 @@ int vtkSlicerGraphCutInteractiveSegmenterLogic::checkMarkups(vtkMRMLScalarVolume
         {
 			double pos[4];
 			markups->GetNthFiducialWorldCoordinates(i,pos);
-			cout<<"WorldPOS:"<<pos[0]<<";"<<pos[1]<<";"<<pos[2]<<";"<<pos[3]<<endl;
+			std::cout<<"WorldPOS:"<<pos[0]<<";"<<pos[1]<<";"<<pos[2]<<";"<<pos[3]<<std::endl;
 			float temp[4];
 			std::copy(pos, pos + 4, temp);
 			float* ijkpos = RASToIJKMatrix->MultiplyPoint(temp);
-			cout<<"IJKPOS:"<<ijkpos[0]<<";"<<ijkpos[1]<<";"<<ijkpos[2]<<";"<<ijkpos[3]<<endl;
+			std::cout<<"IJKPOS:"<<ijkpos[0]<<";"<<ijkpos[1]<<";"<<ijkpos[2]<<";"<<ijkpos[3]<<std::endl;
 			
 			for(int j=0;j<3;j++)
 			{
@@ -238,10 +238,10 @@ int vtkSlicerGraphCutInteractiveSegmenterLogic::checkMarkups(vtkMRMLScalarVolume
 		vector<float> box1=points.at(1);
 		vector<float> box2=points.at(2);
 
-		cout<<"POINTS[0]:"<<star_first[0]<<";"<<star_first[1]<<";"<<star_first[2]<<endl;
-		cout<<"POINTS[1]:"<<box1[0]<<";"<<box1[1]<<";"<<box1[2]<<endl;
-		cout<<"POINTS[2]:"<<box2[0]<<";"<<box2[1]<<";"<<box2[2]<<endl;
-		cout<<"POINTS[3]:"<<star_last[0]<<";"<<star_last[1]<<";"<<star_last[2]<<endl;
+		std::cout<<"POINTS[0]:"<<star_first[0]<<";"<<star_first[1]<<";"<<star_first[2]<<std::endl;
+		std::cout<<"POINTS[1]:"<<box1[0]<<";"<<box1[1]<<";"<<box1[2]<<std::endl;
+		std::cout<<"POINTS[2]:"<<box2[0]<<";"<<box2[1]<<";"<<box2[2]<<std::endl;
+		std::cout<<"POINTS[3]:"<<star_last[0]<<";"<<star_last[1]<<";"<<star_last[2]<<std::endl;
 		
 		if(worldpoints.at(1).at(2)!=worldpoints.at(2).at(2))  //the two points of bounding box are not sure to be on the same slice,
 			return -2;                                        //due to the coorinate transformation (so it is checked before transformation)
@@ -281,25 +281,25 @@ int vtkSlicerGraphCutInteractiveSegmenterLogic::crop(vtkMRMLScalarVolumeNode* in
 	this->cropROI = vtkSmartPointer<vtkMRMLAnnotationROINode>::New();
 	double center[3];
 	this->ROI->GetXYZ(center);
-	cout<<"ROI center :"<<center[0]<<";"<<center[1]<<";"<<center[2]<<";"<<endl;
+	std::cout<<"ROI center :"<<center[0]<<";"<<center[1]<<";"<<center[2]<<";"<<std::endl;
 
 	vtkSmartPointer<vtkMRMLAnnotationROINode> cropROI1 = vtkSmartPointer<vtkMRMLAnnotationROINode>::New();
 	this->SetCropROINode(vtkMRMLAnnotationROINode::SafeDownCast(cropROI1));
 	this->cropROI->SetXYZ(center);
 	double radius[3];
 	this->ROI->GetRadiusXYZ(radius);
-	cout<<"radius*1.2 :"<<radius[0]*1.2<<";"<<radius[1]*1.2<<";"<<radius[2]*1.2<<";"<<endl;
+	std::cout<<"radius*1.2 :"<<radius[0]*1.2<<";"<<radius[1]*1.2<<";"<<radius[2]*1.2<<";"<<std::endl;
 
 	double bounds[6];
 	input->GetRASBounds(bounds);
-	cout<<"RAS Bounds :"<<bounds[0]<<";"<<bounds[1]<<";"<<bounds[2]<<";"<<endl
-		                <<bounds[3]<<";"<<bounds[4]<<";"<<bounds[5]<<";"<<endl;
+	std::cout<<"RAS Bounds :"<<bounds[0]<<";"<<bounds[1]<<";"<<bounds[2]<<";"<<std::endl
+		                <<bounds[3]<<";"<<bounds[4]<<";"<<bounds[5]<<";"<<std::endl;
 
 	double radius1[3];
 	radius1[0]=min(radius[0]*1.2,min(abs(center[0]-bounds[0]),abs(bounds[1]-center[0])));
 	radius1[1]=min(radius[1]*1.2,min(abs(center[1]-bounds[2]),abs(bounds[3]-center[1])));
 	radius1[2]=min(radius[2],min(abs(center[2]-bounds[4]),abs(bounds[5]-center[2])));
-	cout<<"radius1 :"<<radius1[0]<<";"<<radius1[1]<<";"<<radius1[2]<<";"<<endl;
+	std::cout<<"radius1 :"<<radius1[0]<<";"<<radius1[1]<<";"<<radius1[2]<<";"<<std::endl;
 
 	this->cropROI->SetRadiusXYZ(radius1[0],radius1[1],radius1[2]);
 	this->cropROI->Initialize(this->GetMRMLScene());
@@ -312,7 +312,7 @@ int vtkSlicerGraphCutInteractiveSegmenterLogic::crop(vtkMRMLScalarVolumeNode* in
 
 //	this->GetCropVolumeLogic()->SetMRMLScene(this->GetMRMLScene());
 
-	cout<<input->GetID()<<" ; "<<cropROI->GetID()<<" ;"<<endl;
+	std::cout<<input->GetID()<<" ; "<<cropROI->GetID()<<" ;"<<std::endl;
 	return this->GetCropVolumeLogic()->Apply(parametersNode);
 //	return 1;
 	
@@ -331,7 +331,7 @@ char* vtkSlicerGraphCutInteractiveSegmenterLogic::apply(vtkMRMLScalarVolumeNode*
 	gData.wholeRange.col=dims[0];
 	gData.wholeRange.row=dims[1];
 	gData.wholeRange.sli=dims[2];
-	cout<<"dims :"<<dims[0]<<";"<<dims[1]<<";"<<dims[2]<<endl;
+	std::cout<<"dims :"<<dims[0]<<";"<<dims[1]<<";"<<dims[2]<<std::endl;
 
 	imgBox.start.col=0;
 	imgBox.start.row=0;
@@ -344,8 +344,8 @@ char* vtkSlicerGraphCutInteractiveSegmenterLogic::apply(vtkMRMLScalarVolumeNode*
 	//calculate shifted tight in cropped volume
 	double bounds[6];
 	this->ROI->GetRASBounds(bounds);
-	cout<<"bounds :"<<bounds[0]<<";"<<bounds[1]<<";"<<bounds[2]<<endl
-		            <<bounds[3]<<";"<<bounds[4]<<";"<<bounds[5]<<endl;
+	std::cout<<"bounds :"<<bounds[0]<<";"<<bounds[1]<<";"<<bounds[2]<<std::endl
+		            <<bounds[3]<<";"<<bounds[4]<<";"<<bounds[5]<<std::endl;
 	float RASstart[4];
 	float RASend[4];
 	if(abs(bounds[0])<abs(bounds[1]))
@@ -392,9 +392,9 @@ char* vtkSlicerGraphCutInteractiveSegmenterLogic::apply(vtkMRMLScalarVolumeNode*
 	IJKstart[1]=IJK[1];
 	IJKstart[2]=IJK[2];
 
-	cout<<"RASstart :"<<RASstart[0]<<";"<<RASstart[1]<<";"<<RASstart[2]<<endl;
-	cout<<"RASend :"<<RASend[0]<<";"<<RASend[1]<<";"<<RASend[2]<<endl;
-	cout<<"IJKstart :"<<IJKstart[0]<<";"<<IJKstart[1]<<";"<<IJKstart[2]<<endl;
+	std::cout<<"RASstart :"<<RASstart[0]<<";"<<RASstart[1]<<";"<<RASstart[2]<<std::endl;
+	std::cout<<"RASend :"<<RASend[0]<<";"<<RASend[1]<<";"<<RASend[2]<<std::endl;
+	std::cout<<"IJKstart :"<<IJKstart[0]<<";"<<IJKstart[1]<<";"<<IJKstart[2]<<std::endl;
 	IJK=RASToIJKMatrix->MultiplyPoint(RASend);
 	IJKend[0]=IJK[0];
 	IJKend[1]=IJK[1];
@@ -408,13 +408,13 @@ char* vtkSlicerGraphCutInteractiveSegmenterLogic::apply(vtkMRMLScalarVolumeNode*
 	gData.shifttightBox.end.col=min(imgBox.end.col,max((int)IJKstart[0],(int)IJKend[0]));
 	gData.shifttightBox.end.row=min(imgBox.end.row,max((int)IJKstart[1],(int)IJKend[1]));
 	gData.shifttightBox.end.sli=min(imgBox.end.sli,max((int)IJKstart[2],(int)IJKend[2]));
-	cout<<"IJKend :"<<IJKend[0]<<";"<<IJKend[1]<<";"<<IJKend[2]<<endl;
-	cout<<"gData.shifttightBox :"<<gData.shifttightBox.start.col<<";"<<gData.shifttightBox.start.row<<";"<<gData.shifttightBox.start.sli<<endl;
-	cout<<"gData.shifttightBox :"<<gData.shifttightBox.end.col<<";"<<gData.shifttightBox.end.row<<";"<<gData.shifttightBox.end.sli<<endl;
+	std::cout<<"IJKend :"<<IJKend[0]<<";"<<IJKend[1]<<";"<<IJKend[2]<<std::endl;
+	std::cout<<"gData.shifttightBox :"<<gData.shifttightBox.start.col<<";"<<gData.shifttightBox.start.row<<";"<<gData.shifttightBox.start.sli<<std::endl;
+	std::cout<<"gData.shifttightBox :"<<gData.shifttightBox.end.col<<";"<<gData.shifttightBox.end.row<<";"<<gData.shifttightBox.end.sli<<std::endl;
 
 	//set gData's shifted first slice tumor center and last slice tumor center
 	float starfirst[4]={gData.star_first.col,gData.star_first.row,gData.star_first.sli,1.0};
-	cout<<"gData.star_first :"<<gData.star_first.col<<";"<<gData.star_first.row<<";"<<gData.star_first.sli<<endl;
+	std::cout<<"gData.star_first :"<<gData.star_first.col<<";"<<gData.star_first.row<<";"<<gData.star_first.sli<<std::endl;
 	IJK=RASToIJKMatrix->MultiplyPoint(starfirst);
 	gData.shiftstar_first.col=IJK[0];
 	gData.shiftstar_first.row=IJK[1];
@@ -423,10 +423,10 @@ char* vtkSlicerGraphCutInteractiveSegmenterLogic::apply(vtkMRMLScalarVolumeNode*
 	else
 		gData.shiftstar_first.sli=IJK[2];
 	
-	cout<<"gData.shiftstar_first :"<<gData.shiftstar_first.col<<";"<<gData.shiftstar_first.row<<";"<<gData.shiftstar_first.sli<<endl;
+	std::cout<<"gData.shiftstar_first :"<<gData.shiftstar_first.col<<";"<<gData.shiftstar_first.row<<";"<<gData.shiftstar_first.sli<<std::endl;
 
 	float starlast[4]={gData.star_last.col,gData.star_last.row,gData.star_last.sli,1.0};
-	cout<<"gData.star_last :"<<gData.star_last.col<<";"<<gData.star_last.row<<";"<<gData.star_last.sli<<endl;
+	std::cout<<"gData.star_last :"<<gData.star_last.col<<";"<<gData.star_last.row<<";"<<gData.star_last.sli<<std::endl;
 	IJK=RASToIJKMatrix->MultiplyPoint(starlast);
 	gData.shiftstar_last.col=IJK[0];
 	gData.shiftstar_last.row=IJK[1];
@@ -434,7 +434,7 @@ char* vtkSlicerGraphCutInteractiveSegmenterLogic::apply(vtkMRMLScalarVolumeNode*
 		gData.shiftstar_last.sli=gData.shifttightBox.end.sli;
 	else
 	    gData.shiftstar_last.sli=IJK[2];
-	cout<<"gData.shiftstar_last :"<<gData.shiftstar_last.col<<";"<<gData.shiftstar_last.row<<";"<<gData.shiftstar_last.sli<<endl;
+	std::cout<<"gData.shiftstar_last :"<<gData.shiftstar_last.col<<";"<<gData.shiftstar_last.row<<";"<<gData.shiftstar_last.sli<<std::endl;
 
 	// set bkgBox
 	bkgBox.start = (gData.shifttightBox.start+imgBox.start)/2;
@@ -442,37 +442,37 @@ char* vtkSlicerGraphCutInteractiveSegmenterLogic::apply(vtkMRMLScalarVolumeNode*
     bkgBox.start.sli=gData.shifttightBox.start.sli; 
 	bkgBox.end.sli=gData.shifttightBox.end.sli;
 
-	cout<<"imgBox"<<endl;
-	cout<<imgBox.start.sli<<";"<<imgBox.start.row<<";"<<imgBox.start.col<<endl<<imgBox.end.sli<<";"<<imgBox.end.row<<";"<<imgBox.end.col<<endl;
-	cout<<"bkgBox"<<endl;
-	cout<<bkgBox.start.sli<<";"<<bkgBox.start.row<<";"<<bkgBox.start.col<<endl<<bkgBox.end.sli<<";"<<bkgBox.end.row<<";"<<bkgBox.end.col<<endl;
+	std::cout<<"imgBox"<<std::endl;
+	std::cout<<imgBox.start.sli<<";"<<imgBox.start.row<<";"<<imgBox.start.col<<std::endl<<imgBox.end.sli<<";"<<imgBox.end.row<<";"<<imgBox.end.col<<std::endl;
+	std::cout<<"bkgBox"<<std::endl;
+	std::cout<<bkgBox.start.sli<<";"<<bkgBox.start.row<<";"<<bkgBox.start.col<<std::endl<<bkgBox.end.sli<<";"<<bkgBox.end.row<<";"<<bkgBox.end.col<<std::endl;
 
 	 //loadImage into gData
     gData.loadImage(orgimage,imgBox);
 
     Data3D<bool> mat_mask(gData.image.getSize(),true);
-	cout<<"aaaaaaaaaaaaaa"<<mat_mask.getNumCol()<<";"<<mat_mask.getNumRow()<<";"<<mat_mask.getNumSli()<<endl;
+	std::cout<<"aaaaaaaaaaaaaa"<<mat_mask.getNumCol()<<";"<<mat_mask.getNumRow()<<";"<<mat_mask.getNumSli()<<std::endl;
     mat_mask.set(bkgBox,false);
-    cout<<"aaaaaaaaaaaaaa"<<endl;
+    std::cout<<"aaaaaaaaaaaaaa"<<std::endl;
     gData.seeds.set(mat_mask,BACKGROUND);
-	cout<<"bbbbbbbbbbbbbbb"<<endl;
+	std::cout<<"bbbbbbbbbbbbbbb"<<std::endl;
 
     //set pixels outside tightBox on that slice to be background
 	
 //    gData.seeds.set(gData.tightBox,UNKNOWN);
 	gData.seeds.set(gData.shifttightBox,UNKNOWN);
 
-//	cout<<"this->seg:"<<this->seg<<endl;
+//	std::cout<<"this->seg:"<<this->seg<<std::endl;
     if(this->seg==NULL)
         initSeg(flag3D,flag2D);
     else reseg(flag3D,flag2D);
 
 	vtkSmartPointer<vtkMRMLLabelMapVolumeNode> labelVolume = vtkSmartPointer<vtkMRMLLabelMapVolumeNode>::New();
 //	vtkSmartPointer<vtkMRMLLabelMapVolumeNode> outputLabelVolume = vtkSmartPointer<vtkMRMLLabelMapVolumeNode>::New();
-//	cout<<"Created outputLabelVolume"<<endl;
+//	std::cout<<"Created outputLabelVolume"<<std::endl;
 	vtkSmartPointer<vtkImageData> labelMap = vtkSmartPointer<vtkImageData>::New();
 	labelMap=gData.getLabelMap();
-	cout<<"labelMap:"<<labelMap<<endl;
+	std::cout<<"labelMap:"<<labelMap<<std::endl;
 
 	std::string newLabel = std::string(input->GetName())+"-label";
 	labelVolume=this->GetVolumesLogic()->CreateAndAddLabelVolume(input,newLabel.c_str());
@@ -565,7 +565,7 @@ vector<MyBasic::Index3D> setSideStars(MyBasic::Index3D _s1,MyBasic::Index3D star
    MyBasic::Index3D star_first = _s1;
    MyBasic::Index3D star_last = _s2;
 
-   cout<<stars.size()<<endl;
+   std::cout<<stars.size()<<std::endl;
    stars.front() = star_first;
    stars.back() = star_last;
 
@@ -583,10 +583,10 @@ vector<MyBasic::Index3D> setSideStars(MyBasic::Index3D _s1,MyBasic::Index3D star
        stars[i] = star_last + Index3D(i-star_last.sli,dr*(i-star_last.sli),dc*(i-star_last.sli));
    }
 
-   cout<<"Stars:"<<endl;
+   std::cout<<"Stars:"<<std::endl;
    for(int i=0;i<stars.size();i++)
    {
-	   cout<<"star"<<i<<":"<<endl<<stars[i].sli<<";"<<stars[i].row<<";"<<stars[i].col<<endl;
+	   std::cout<<"star"<<i<<":"<<std::endl<<stars[i].sli<<";"<<stars[i].row<<";"<<stars[i].col<<std::endl;
 	   stars[i].print();
    }
    return stars;
@@ -595,22 +595,22 @@ vector<MyBasic::Index3D> setSideStars(MyBasic::Index3D _s1,MyBasic::Index3D star
 
 void vtkSlicerGraphCutInteractiveSegmenterLogic::initSeg(bool flag3D,bool flag2D)
 {
-	cout<<"Begin inti segment"<<endl;
+	std::cout<<"Begin inti segment"<<std::endl;
     Data3D<LABEL>& mask = gData.mask;
-	cout<<"mask:"<<endl;
-	cout<<mask.getNumSli()<<";"<<mask.getNumRow()<<";"<<mask.getNumCol()<<endl;
+	std::cout<<"mask:"<<std::endl;
+	std::cout<<mask.getNumSli()<<";"<<mask.getNumRow()<<";"<<mask.getNumCol()<<std::endl;
 
-//	cout<<"image:"<<endl;
-//	cout<<gData.image.getNumSli()<<";"<<gData.image.getNumRow()<<";"<<gData.image.getNumCol()<<endl;
+//	std::cout<<"image:"<<std::endl;
+//	std::cout<<gData.image.getNumSli()<<";"<<gData.image.getNumRow()<<";"<<gData.image.getNumCol()<<std::endl;
     
 //    MyBasic::Range3D& tightBox = gData.tightBox;
-	cout<<"tightBox"<<endl;
-	cout<<gData.shifttightBox.start.sli<<";"<<gData.shifttightBox.start.row<<";"<<gData.shifttightBox.start.col<<endl
-		<<gData.shifttightBox.end.sli<<";"<<gData.shifttightBox.end.row<<";"<<gData.shifttightBox.end.col<<endl;
+	std::cout<<"tightBox"<<std::endl;
+	std::cout<<gData.shifttightBox.start.sli<<";"<<gData.shifttightBox.start.row<<";"<<gData.shifttightBox.start.col<<std::endl
+		<<gData.shifttightBox.end.sli<<";"<<gData.shifttightBox.end.row<<";"<<gData.shifttightBox.end.col<<std::endl;
 
     gData.mask.setAll(BACKGROUND);
 	gData.mask.set(gData.shifttightBox,FOREGROUND);
-	cout<<"gData.mask.set"<<endl;
+	std::cout<<"gData.mask.set"<<std::endl;
 
    // MyBasic::Range3D seg_region(0,16,10,46,9,43);
 	this->seg = new AdaptiveSegment3D(gData.image,gData.mask,int((gData.shifttightBox.start.sli+gData.shifttightBox.end.sli)/2));//,seg_region);
@@ -620,10 +620,10 @@ void vtkSlicerGraphCutInteractiveSegmenterLogic::initSeg(bool flag3D,bool flag2D
 	star_first= gData.shiftstar_first;
 	star_last = gData.shiftstar_last;
 
-	cout<<"setSideStars"<<endl;
-	cout<<star_middle.sli<<";"<<star_middle.row<<";"<<star_middle.col<<endl;
-	cout<<star_first.sli<<";"<<star_first.row<<";"<<star_first.col<<endl;
-	cout<<star_last.sli<<";"<<star_last.row<<";"<<star_last.col<<endl;
+	std::cout<<"setSideStars"<<std::endl;
+	std::cout<<star_middle.sli<<";"<<star_middle.row<<";"<<star_middle.col<<std::endl;
+	std::cout<<star_first.sli<<";"<<star_first.row<<";"<<star_first.col<<std::endl;
+	std::cout<<star_last.sli<<";"<<star_last.row<<";"<<star_last.col<<std::endl;
     vector<MyBasic::Index3D> stars = setSideStars(star_first,star_middle,star_last);
 
     for(int i=0;i<stars.size();i++)
@@ -654,20 +654,20 @@ void vtkSlicerGraphCutInteractiveSegmenterLogic::initSeg(bool flag3D,bool flag2D
     cfg.min_area = cfg.max_area/3;
     cfg.seed_radius = 2;
 
-	cout<<"Set Configure"<<endl;
+	std::cout<<"Set Configure"<<std::endl;
     this->seg->configure(cfg);
 
     double decrease_area_min[7]={0.5117,0.6762,0.8207,0.8698,0.8453,0.7268,0.5069};
     vector<double> min_ratio(decrease_area_min,decrease_area_min+7);
     vector<double> max_ratio(7,1.3);
     this->seg->setAreaRatio(min_ratio,max_ratio);
-	cout<<"Set Area Ratio"<<endl;
+	std::cout<<"Set Area Ratio"<<std::endl;
 
     this->seg->segment();
     gData.label = this->seg->getLabeling();
-	cout<<"inti seg label"<<endl;
-	cout<<"star2:"<<cfg.starshape2<<endl;
-	cout<<"star3:"<<cfg.starshape3<<endl;
+	std::cout<<"inti seg label"<<std::endl;
+	std::cout<<"star2:"<<cfg.starshape2<<std::endl;
+	std::cout<<"star3:"<<cfg.starshape3<<std::endl;
 
 //	gData.label.print();
 }
@@ -678,14 +678,14 @@ void vtkSlicerGraphCutInteractiveSegmenterLogic::reseg(bool flag3D,bool flag2D)
 
     this->seg->resegment(&gData.seeds);
     gData.label = this->seg->getLabeling();
-	cout<<"reseg label"<<endl;
+	std::cout<<"reseg label"<<std::endl;
 //	gData.label.print();
 }
 
 /*show result in 3D*/
 //int vtkSlicerGraphCutInteractiveSegmenterLogic::showResult(vtkMRMLScalarVolumeNode* input,vtkMRMLModelNode* model,vtkMRMLScene* scene)
 //{
-//	cout<<"Showing result..."<<endl;
+//	std::cout<<"Showing result..."<<std::endl;
 //    Data3D<LABEL>& label = gData.label;
 //    Data3D<short>& lableimg = gData.image;
 //    vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
@@ -708,7 +708,7 @@ void vtkSlicerGraphCutInteractiveSegmenterLogic::reseg(bool flag3D,bool flag2D)
 //        vector<MyBasic::Index2D> bds = IP::boundaryPoints(label.getSlice(s),4);	
 //		vector<MyBasic::Index2D> pts = IP::boundaryPoints(label.getSlice(s),4);	
 //		vector<MyBasic::Index2D> sortedpts;
-//		cout << s << "  slice's  boundary:" << bds.size() << endl;
+//		std::cout << s << "  slice's  boundary:" << bds.size() << std::endl;
 //		cellArray->InsertNextCell(bds.size());
 //        // Sort boundary points clockwise
 //		int next=0;//the next element in pts that wiil be appended to sortedpts
@@ -737,7 +737,7 @@ void vtkSlicerGraphCutInteractiveSegmenterLogic::reseg(bool flag3D,bool flag2D)
 //					}
 //				}					
 //			}		
-////			cout<<"pts.size():"<<pts.size()<<";next:"<<next<<"tempnext:"<<tempnext<<endl;
+////			std::cout<<"pts.size():"<<pts.size()<<";next:"<<next<<"tempnext:"<<tempnext<<std::endl;
 //			next=tempnext;
 //		}
 //
@@ -754,7 +754,7 @@ void vtkSlicerGraphCutInteractiveSegmenterLogic::reseg(bool flag3D,bool flag2D)
 //				first[1]=ras[1];
 //				first[2]=ras[2];				
 //			}		
-////			cout<<"id:"<<id<<endl;
+////			std::cout<<"id:"<<id<<std::endl;
 //		}
 //		int id=points->InsertNextPoint(first[0],first[1],first[2]);
 //		cellArray->InsertCellPoint(id);	
@@ -792,17 +792,17 @@ void vtkSlicerGraphCutInteractiveSegmenterLogic::reseg(bool flag3D,bool flag2D)
 //	
 //	float center[4]={(box1[0]+box4[0])/2,(box1[1]+box4[1])/2,(box1[2]+box4[2])/2,1};
 //	float* centerRAS = IJKToRASMatrix->MultiplyPoint(center);
-//	cout<<"center:"<<center[0]<<";"<<center[1]<<";"<<center[2]<<";"<<endl;
-//	cout<<"centerRAS:"<<centerRAS[0]<<";"<<centerRAS[1]<<";"<<centerRAS[2]<<";"<<endl;
+//	std::cout<<"center:"<<center[0]<<";"<<center[1]<<";"<<center[2]<<";"<<std::endl;
+//	std::cout<<"centerRAS:"<<centerRAS[0]<<";"<<centerRAS[1]<<";"<<centerRAS[2]<<";"<<std::endl;
 //
 //	vtkSmartPointer<vtkMRMLAnnotationROINode> ROI = vtkSmartPointer<vtkMRMLAnnotationROINode>::New();
 //	ROI->SetXYZ(double(centerRAS[0]),double(centerRAS[1]),double(centerRAS[2]));
-//	cout<<"centerRAS:"<<double(centerRAS[0])<<";"<<double(centerRAS[1])<<";"<<double(centerRAS[2])<<";"<<endl;
+//	std::cout<<"centerRAS:"<<double(centerRAS[0])<<";"<<double(centerRAS[1])<<";"<<double(centerRAS[2])<<";"<<std::endl;
 //
 //	float radius[4]={(box4[0]-box1[0])/2,(box4[1]-box1[1])/2,(box4[2]-box1[2])/2,1};
 //	float* radiusRAS = IJKToRASMatrix->MultiplyPoint(radius);
-//	cout<<"radius:"<<radius[0]<<";"<<radius[1]<<";"<<radius[2]<<";"<<endl;
-//	cout<<"radiusRAS:"<<radiusRAS[0]<<";"<<radiusRAS[1]<<";"<<radiusRAS[2]<<";"<<endl;
+//	std::cout<<"radius:"<<radius[0]<<";"<<radius[1]<<";"<<radius[2]<<";"<<std::endl;
+//	std::cout<<"radiusRAS:"<<radiusRAS[0]<<";"<<radiusRAS[1]<<";"<<radiusRAS[2]<<";"<<std::endl;
 //	ROI->SetRadiusXYZ(double(radiusRAS[0]),double(radiusRAS[1]),double(radiusRAS[2]));
 //	ROI->Initialize(this->GetMRMLScene());
 //
@@ -834,7 +834,7 @@ void vtkSlicerGraphCutInteractiveSegmenterLogic::reseg(bool flag3D,bool flag2D)
 //	
 //	if(!model->GetDisplayNode())
 //	{
-//		cout<<"new model->GetDisplayNode"<<endl;
+//		std::cout<<"new model->GetDisplayNode"<<std::endl;
 //		vtkSmartPointer<vtkMRMLModelDisplayNode> modelDisplayNode = vtkSmartPointer<vtkMRMLModelDisplayNode>::New();
 //		modelDisplayNode->SetScene(this->GetMRMLScene());
 //		modelDisplayNode->SetVisibility(true);
@@ -868,7 +868,7 @@ void vtkSlicerGraphCutInteractiveSegmenterLogic::SetMRMLSceneInternal(vtkMRMLSce
   events->InsertNextValue(vtkMRMLScene::NodeRemovedEvent);
   events->InsertNextValue(vtkMRMLScene::EndCloseEvent);
   this->SetAndObserveMRMLSceneEventsInternal(newScene, events);
-  cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
+  std::cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<std::endl;
   events->Delete();
 }
 
@@ -895,7 +895,7 @@ void vtkSlicerGraphCutInteractiveSegmenterLogic
     {
     return;
     }
-	cout<<"OnMRMLSceneNodeAdded()"<<endl;
+	std::cout<<"OnMRMLSceneNodeAdded()"<<std::endl;
 	setEditorParamNode();
 }
 
@@ -907,17 +907,17 @@ void vtkSlicerGraphCutInteractiveSegmenterLogic
 
 void vtkSlicerGraphCutInteractiveSegmenterLogic::setEditorParamNode()
 {
-	cout<<"setEditorParamNode()"<<endl;
+	std::cout<<"setEditorParamNode()"<<std::endl;
 	if(this->GetMRMLScene())
 	{
 	int size = this->GetMRMLScene()->GetNumberOfNodesByClass("vtkMRMLScriptedModuleNode");
-	cout<<this->GetMRMLScene()<<"::"<<size<<endl;
+	std::cout<<this->GetMRMLScene()<<"::"<<size<<std::endl;
 	if(size>0)
 	{
 		for(int i=0;i<size;i++)
 		{
 			vtkSmartPointer<vtkMRMLScriptedModuleNode> moduleNode = vtkMRMLScriptedModuleNode::SafeDownCast(this->GetMRMLScene()->GetNthNodeByClass(i,"vtkMRMLScriptedModuleNode"));
-			//cout<<moduleNode->GetModuleName()<<endl;
+			//std::cout<<moduleNode->GetModuleName()<<std::endl;
 			if(moduleNode->GetModuleName())
 			{
 				if(strcmp(moduleNode->GetModuleName(),"Editor")==0)
@@ -932,29 +932,29 @@ void vtkSlicerGraphCutInteractiveSegmenterLogic::setEditorParamNode()
 					this->callback=tmpcallback;
 					this->editorModuleNode=moduleNode;
 					this->editorModuleNode->AddObserver(vtkCommand::ModifiedEvent,callback);
-					cout<<"Got Editor Module................"<<moduleNode->GetModuleName()<<endl;
+					std::cout<<"Got Editor Module................"<<moduleNode->GetModuleName()<<std::endl;
 				}
 			}
 		}
 	}
 	}
-	cout<<"setEditorParamNode()END"<<endl;
+	std::cout<<"setEditorParamNode()END"<<std::endl;
 }
 
 void recordTime(vtkObject* caller, long unsigned int eventId, void* clientData, void* callData)
 {
-	cout<<"recordTime!!!!!!!!!"<<endl;
+	std::cout<<"recordTime!!!!!!!!!"<<std::endl;
 	//vtkMRMLScriptedModuleNode *moduleNode = static_cast<vtkMRMLScriptedModuleNode*>(caller);
 	vtkSmartPointer<vtkMRMLScriptedModuleNode> moduleNode = static_cast<vtkMRMLScriptedModuleNode*>(caller);
-	cout<<moduleNode->GetParameter("effect")<<endl;
+	std::cout<<moduleNode->GetParameter("effect")<<std::endl;
 	if(moduleNode->GetParameter("effect").compare("PaintEffect")==0)
 	{
-		cout<<"Got Paintor................."<<isPainter<<endl;
+		std::cout<<"Got Paintor................."<<isPainter<<std::endl;
 		time_t currentTime;
 	    time(&currentTime);
 		if(!isPainter)
 		{
-			cout<<"Start Time::::::::::"<<currentTime<<endl;
+			std::cout<<"Start Time::::::::::"<<currentTime<<std::endl;
 			start=currentTime;
 			isPainter = true;
 		}
@@ -966,10 +966,10 @@ int vtkSlicerGraphCutInteractiveSegmenterLogic::calcTime()
 {
 	time_t currentTime;
 	time(&currentTime);
-	cout<<"End Time::::::::::"<<currentTime<<endl;
+	std::cout<<"End Time::::::::::"<<currentTime<<std::endl;
 	isPainter=false;
 	this->totalTime+=difftime(currentTime,start);
-	cout<<"Totoal Time::::::::"<<this->totalTime<<endl;
+	std::cout<<"Totoal Time::::::::"<<this->totalTime<<std::endl;
 	this->editorModuleNode->RemoveObservers(vtkCommand::ModifiedEvent,this->callback);
 	return this->totalTime;
 }

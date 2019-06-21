@@ -77,15 +77,15 @@ public:
   //////////////////////////////////////////////////////////////////////////////////
   void print(void) const
   {
-    cout << "The matrix is----------------->" << endl;
+    std::cout << "The matrix is----------------->" << std::endl;
     for (int z = 0; z < m_nSli; z++)
     {
-      cout << "The " << z << "th slice---->" << endl;
+      std::cout << "The " << z << "th slice---->" << std::endl;
       for (int y = 0; y < m_nRow; y++)
       {
         for (int x = 0; x < m_nCol; x++)
-          cout << at(z, y, x) << ' ';
-        cout << endl;
+          std::cout << at(z, y, x) << ' ';
+        std::cout << std::endl;
       }
     }
   }
@@ -300,7 +300,7 @@ public:
   //copy data using a mask
   void copyFrom(const Data3D<T> & src, const Data3D<bool> & mask) //does not check memory overlap
   {
-    smart_assert(Size3D::isEqual(src.getSize(), mask.getSize()), "Sizes of mask and src don't match");
+    smart_assert(MyBasic::Size3D::isEqual(src.getSize(), mask.getSize()), "Sizes of mask and src don't match");
     if (m_nCol != src.getNumCol() || m_nRow != src.getNumRow()) resize(src.getNumSli(), src.getNumRow(), src.getNumCol());
 
     m_mat.copyFrom(src.getMat(), mask.getMat());
@@ -321,9 +321,9 @@ public:
   {
     smart_assert(inRange(rdst), "The box is outof range");
     smart_assert(src.inRange(rsrc), "The destination box is outof range");
-    smart_assert(Size3D::isEqual(rsrc.getSize(), rdst.getSize()), "The copy ranges should be equal");
+    smart_assert(MyBasic::Size3D::isEqual(rsrc.getSize(), rdst.getSize()), "The copy ranges should be equal");
 
-    Size3D size(rsrc.getSize());
+    MyBasic::Size3D size(rsrc.getSize());
     for (int sli = 0; sli < size.nSli; sli++)
       for (int row = 0; row < size.nRow; row++)
         for (int col = 0; col < size.nCol; col++)
@@ -337,7 +337,7 @@ public:
   template<typename T2>
   void copyFrom(const Data3D<T2> & src, const Data3D<bool> & mask) //does not check memory overlap
   {
-    smart_assert(Size3D::isEqual(src.getSize(), mask.getSize()), "Sizes of mask and src don't match");
+    smart_assert(MyBasic::Size3D::isEqual(src.getSize(), mask.getSize()), "Sizes of mask and src don't match");
     if (m_nCol != src.getNumCol() || m_nRow != src.getNumRow()) resize(src.getNumSli(), src.getNumRow(), src.getNumCol());
 
     m_mat.copyFrom(src.getMat(), mask.getMat());

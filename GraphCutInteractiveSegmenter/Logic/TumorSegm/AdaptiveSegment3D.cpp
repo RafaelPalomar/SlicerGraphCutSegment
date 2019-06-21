@@ -375,7 +375,7 @@ void AdaptiveSegment3D::segment()
 {
   //build graph and cut
  // Graph3D g(img_roi.getNumSli(),img_roi.getNumRow(),img_roi.getNumCol());
-// cout<<" before compute star shape"<<endl;
+// std::cout<<" before compute star shape"<<endl;
   std::cout << "Begin adaptive segment3D" << std::endl;
   ParameterSearch();
   if (!cfg.starshape3) return;
@@ -401,8 +401,8 @@ void AdaptiveSegment3D::segment()
   //	return;
   m_pGraph->addSmoothCost(extraSmoothCost.id1, extraSmoothCost.id2, extraSmoothCost.cap, extraSmoothCost.rev_cap);
   std::cout << "Done add extra smoothterm  4" << std::endl;
-  //cout<<"star3d size "<<extraSmoothCost.id1.size()<<endl;
- //	cout<<" Begin maxflow "<<endl;
+  //std::cout<<"star3d size "<<extraSmoothCost.id1.size()<<endl;
+ //	std::cout<<" Begin maxflow "<<endl;
   double flow = m_pGraph->maxflow();
   std::cout << " Got flow  5" << flow << std::endl;
   labeling = m_pGraph->get_labeling();

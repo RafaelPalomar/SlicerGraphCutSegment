@@ -16,8 +16,8 @@ std::vector<MyBasic::Index2D> getPointsWithinCircle(const std::vector<Index2D>& 
 std::vector<MyBasic::Index2D> getPointsWithinCircle(const std::vector<Index3D>& seeds, int radius);
 
 
-std::vector<MyBasic::Index2D> getBorderPoints(const Size2D& ImgSize, int bandWidth);
-std::vector<MyBasic::Index2D> getBorderPoints(const Size3D& ImgSize, int bandWidth);
+std::vector<MyBasic::Index2D> getBorderPoints(const MyBasic::Size2D& ImgSize, int bandWidth);
+std::vector<MyBasic::Index2D> getBorderPoints(const MyBasic::Size3D& ImgSize, int bandWidth);
 
 
 };

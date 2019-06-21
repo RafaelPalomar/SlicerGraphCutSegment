@@ -187,7 +187,7 @@ void qSlicerGraphCutInteractiveSegmenterModuleWidget::updateApplyUpdateButtonSta
 			d->markupsMRMLNodeComboBox->isEnabled())
 		{
 			d->applyPushButton->setEnabled(true);
-			cout<<"Apply Button Enabled!"<<endl;
+			std::cout<<"Apply Button Enabled!"<<endl;
 		}
 	}
 
@@ -203,7 +203,7 @@ void qSlicerGraphCutInteractiveSegmenterModuleWidget::updateReapplyUpdateButtonS
 	d->star3CheckBox->setEnabled(false);
 	d->inputVolumeMRMLNodeComboBox->setEnabled(false);
 	d->markupsMRMLNodeComboBox->setEnabled(false);
-    cout<<"Reapply Button Enabled!"<<endl;
+    std::cout<<"Reapply Button Enabled!"<<endl;
 }
 
 void qSlicerGraphCutInteractiveSegmenterModuleWidget::updateResetUpdateButtonState()
@@ -211,7 +211,7 @@ void qSlicerGraphCutInteractiveSegmenterModuleWidget::updateResetUpdateButtonSta
 	Q_D(qSlicerGraphCutInteractiveSegmenterModuleWidget);
 	d->resetPushButton->setToolTip("Reset Segmentation.");
     d->resetPushButton->setEnabled(true);
-    cout<<"Reset Button Enabled!"<<endl;
+    std::cout<<"Reset Button Enabled!"<<endl;
 }
 
 void qSlicerGraphCutInteractiveSegmenterModuleWidget:: onInputVolumeMRMLNodeChanged()
@@ -219,14 +219,14 @@ void qSlicerGraphCutInteractiveSegmenterModuleWidget:: onInputVolumeMRMLNodeChan
     Q_D(qSlicerGraphCutInteractiveSegmenterModuleWidget);
     Q_ASSERT(d->inputVolumeMRMLNodeComboBox);
     updateApplyUpdateButtonState();
-	cout<<"onInputVolumeMRMLNodeChanged"<<endl;
+	std::cout<<"onInputVolumeMRMLNodeChanged"<<endl;
 }
 
 void qSlicerGraphCutInteractiveSegmenterModuleWidget:: onOutputVolumeMRMLNodeChanged()
 {
     Q_D(qSlicerGraphCutInteractiveSegmenterModuleWidget);
     Q_ASSERT(d->outputVolumeMRMLNodeComboBox);
-	cout<<"onOutputVolumeMRMLNodeChanged"<<endl;
+	std::cout<<"onOutputVolumeMRMLNodeChanged"<<endl;
 }
 
 //-----------------------------------------------------------------------------
@@ -267,7 +267,7 @@ void qSlicerGraphCutInteractiveSegmenterModuleWidget:: onCropPushButtonClicked()
 	if(1==logic->checkMarkups(vtkMRMLScalarVolumeNode::SafeDownCast(d->inputVolumeMRMLNodeComboBox->currentNode()),
 		                      vtkMRMLMarkupsFiducialNode::SafeDownCast(d->markupsMRMLNodeComboBox->currentNode())))
 	{
-		cout<<"logic->crop"<<endl;
+		std::cout<<"logic->crop"<<endl;
 		this->isCropped=!logic->crop(vtkMRMLScalarVolumeNode::SafeDownCast(d->inputVolumeMRMLNodeComboBox->currentNode()),parametersNode);
 		if (this->isCropped)
 		{		
@@ -280,7 +280,7 @@ void qSlicerGraphCutInteractiveSegmenterModuleWidget:: onCropPushButtonClicked()
 			vtkMRMLSelectionNode *selectionNode = appLogic->GetSelectionNode();
 			selectionNode->SetReferenceActiveVolumeID(parametersNode->GetOutputVolumeNodeID());
 			appLogic->PropagateVolumeSelection();
-			cout<<"After   CropVolumeLogic()->Apply"<<endl;
+			std::cout<<"After   CropVolumeLogic()->Apply"<<endl;
 		}
 	}
 	parametersNode->Delete();
@@ -304,7 +304,7 @@ void qSlicerGraphCutInteractiveSegmenterModuleWidget:: onApplyPushButtonClicked(
 	}
 	else
 	{
-		cout<<"not cropped"<<endl;
+		std::cout<<"not cropped"<<endl;
 		if(1==logic->checkMarkups(vtkMRMLScalarVolumeNode::SafeDownCast(d->inputVolumeMRMLNodeComboBox->currentNode()),
 			vtkMRMLMarkupsFiducialNode::SafeDownCast(d->markupsMRMLNodeComboBox->currentNode())))
 		{
@@ -365,7 +365,7 @@ void qSlicerGraphCutInteractiveSegmenterModuleWidget:: onResetPushButtonClicked(
 	d->star3CheckBox->setEnabled(true);
 	d->inputVolumeMRMLNodeComboBox->setEnabled(true);
 	d->markupsMRMLNodeComboBox->setEnabled(true);
-	cout<<"reset button clicked!"<<endl;
+	std::cout<<"reset button clicked!"<<endl;
 
 }
 
@@ -383,7 +383,7 @@ void qSlicerGraphCutInteractiveSegmenterModuleWidget:: onEndCloseEvent()
 	d->inputVolumeMRMLNodeComboBox->setEnabled(true);
 	d->markupsMRMLNodeComboBox->setEnabled(true);
 	this->isCropped=false;
-	cout<<"close scene!"<<endl;
+	std::cout<<"close scene!"<<endl;
 }
 
   

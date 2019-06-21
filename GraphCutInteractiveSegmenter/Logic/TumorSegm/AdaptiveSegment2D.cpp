@@ -68,7 +68,7 @@ void AdaptiveSegment2D::execute()
   double lambda_left = 0.1, lambda_right = 20;
   binarySearchForRange(lambda_left, lambda_right);
   searchForBestLambda(lambda_left, lambda_right, 8);
-  //	cout<<"!!!!!!!!!!AdaptiveSegment2D::execute()"<<endl;
+  //	std::cout<<"!!!!!!!!!!AdaptiveSegment2D::execute()"<<endl;
   segment(bestLambda);
 }
 
@@ -154,7 +154,7 @@ Data2D<double> AdaptiveSegment2D::getDataCost(LABEL l) const
    }
 }
 
-pair<Data2D<double>,Data2D<double> > AdaptiveSegment2D::getSmoothCost(DIRECTION d) const
+std::pair<Data2D<double>,Data2D<double> > AdaptiveSegment2D::getSmoothCost(DIRECTION d) const
 {
    switch(d)
    {
@@ -181,7 +181,7 @@ void AdaptiveSegment2D::binarySearchForRange(double& lambda_left, double& lambda
   int iter_times = 0;
   int max_times = 10;
   double lambda_middle;
-  //  cout<<"min area "<<cfg.min_area<<" max area "<<cfg.max_area<<endl;
+  //  std::cout<<"min area "<<cfg.min_area<<" max area "<<cfg.max_area<<endl;
     //step 1: search for lambda_middle
   while (iter_times < max_times)
   {
@@ -189,7 +189,7 @@ void AdaptiveSegment2D::binarySearchForRange(double& lambda_left, double& lambda
     segment(lambda_middle);
     int area = IP::bwarea(labeling);
 
-    //      cout<<"lambda middle "<<lambda_middle<<" area "<<area<<endl;
+    //      std::cout<<"lambda middle "<<lambda_middle<<" area "<<area<<endl;
 
     if (area >= cfg.min_area && area <= cfg.max_area) break;
     if (area < cfg.min_area)
@@ -216,11 +216,11 @@ void AdaptiveSegment2D::binarySearchForRange(double& lambda_left, double& lambda
   iter_times = 0;
   while (iter_times < max_times)
   {
-    //		cout<<iter_times<<"/"<<max_times<<"  binarySearchForRange/lambda_left"<<endl;
+    //		std::cout<<iter_times<<"/"<<max_times<<"  binarySearchForRange/lambda_left"<<endl;
     segment(lambda_left);
     int area = IP::bwarea(labeling);
 
-    //      cout<<"lambda left "<<lambda_left<<" area "<<area<<endl;
+    //      std::cout<<"lambda left "<<lambda_left<<" area "<<area<<endl;
 
     if (area >= cfg.min_area && area <= cfg.max_area) break;
     if (area < cfg.min_area)
@@ -239,12 +239,12 @@ void AdaptiveSegment2D::binarySearchForRange(double& lambda_left, double& lambda
   iter_times = 0;
   while (iter_times < max_times)
   {
-    //		cout<<iter_times<<"/"<<max_times<<"  binarySearchForRange/lambda_right"<<endl;
+    //		std::cout<<iter_times<<"/"<<max_times<<"  binarySearchForRange/lambda_right"<<endl;
     iter_times++;
     segment(lambda_right);
     int area = IP::bwarea(labeling);
 
-    //  cout<<"lambda right "<<lambda_right<<" area "<<area<<endl;
+    //  std::cout<<"lambda right "<<lambda_right<<" area "<<area<<endl;
 
     if (area >= cfg.min_area && area <= cfg.max_area) break;
     if (area > cfg.max_area)
@@ -256,7 +256,7 @@ void AdaptiveSegment2D::binarySearchForRange(double& lambda_left, double& lambda
   }
 
   //debug
-//  cout<<"lambda left "<<lambda_left<<" lambda middle "<<lambda_middle<<" lambda right "<<lambda_right<<endl;
+//  std::cout<<"lambda left "<<lambda_left<<" lambda middle "<<lambda_middle<<" lambda right "<<lambda_right<<endl;
 }
 
 //To do: compactness
@@ -269,21 +269,21 @@ void AdaptiveSegment2D::searchForBestLambda(double lambda_left, double lambda_ri
   Data3D<LABEL> result(smp_num, image.getHeight(), image.getWidth());
 
   using namespace std;
-  //	cout<<"lambda_left:"<<lambda_left<<"               lambda_right:"<<lambda_right<<endl;
+  //	std::cout<<"lambda_left:"<<lambda_left<<"               lambda_right:"<<lambda_right<<endl;
   double dl = (lambda_right - lambda_left) / smp_num;
   bestLambda = lambda_right;
-  std::vector<pair<double, double> > cmpt_lambda;
+  std::vector<std::pair<double, double> > cmpt_lambda;
   for (int i = 0; i < smp_num; i++)
   {
     double lambda = lambda_left + i * dl;
-    //		cout<<i<<"/"<<smp_num<<"  AdaptiveSegment2D::searchForBestLambda(double lambda_left, double lambda_right, int smp_num)"<<endl;
+    //		std::cout<<i<<"/"<<smp_num<<"  AdaptiveSegment2D::searchForBestLambda(double lambda_left, double lambda_right, int smp_num)"<<endl;
     segment(lambda);
     // Viewer::show("label",labeling);
     double compactness = -IP::distanceStd2Center(labeling, tumor_center);
-    cmpt_lambda.push_back(pair<double, double>(compactness, lambda));
+    cmpt_lambda.push_back(std::pair<double, double>(compactness, lambda));
 
     result.setSlice(i, labeling);
-    //        cout<<"lambda "<<lambda<<" compactness "<<compactness<<endl;
+    //        std::cout<<"lambda "<<lambda<<" compactness "<<compactness<<endl;
   }
 
   double bestCompactness = cmpt_lambda[0].first;
@@ -293,7 +293,7 @@ void AdaptiveSegment2D::searchForBestLambda(double lambda_left, double lambda_ri
     {
       bestCompactness = cmpt_lambda[i].first;
       bestLambda = cmpt_lambda[i].second;
-      //		   cout<<"best lambda "<<bestLambda<<endl;
+      //		   std::cout<<"best lambda "<<bestLambda<<endl;
     }
   }
 
@@ -322,7 +322,7 @@ void AdaptiveSegment2D::prepareData()
 
 void AdaptiveSegment2D::segment(double lambda)
 {
-  //	cout<<"segment(bestLambda):"<<lambda<<endl;
+  //	std::cout<<"segment(bestLambda):"<<lambda<<endl;
   if (!readyToSegment)
   {
     prepareData();
@@ -337,7 +337,7 @@ void AdaptiveSegment2D::segment(double lambda)
     g.addDataCost(bkcost, BACKGROUND);
   }
   g.addDataCost(dataCostExtra.id, dataCostExtra.fgcost, dataCostExtra.bkcost);
-  //	   cout<<"adaptiveSegment2D segment done add data cost"<<endl;
+  //	   std::cout<<"adaptiveSegment2D segment done add data cost"<<endl;
 
   if (cfg.smoothterm)
   {
@@ -350,7 +350,7 @@ void AdaptiveSegment2D::segment(double lambda)
     g.addSmoothCost(smoothCostC.first, smoothCostC.second, COLUMN);
   }
   g.addSmoothCost(smoothCostExtra.id1, smoothCostExtra.id2, smoothCostExtra.cap, smoothCostExtra.rev_cap);
-  //	cout<<"adaptiveSegment2D segment done add smooth cost"<<endl;
+  //	std::cout<<"adaptiveSegment2D segment done add smooth cost"<<endl;
 
   g.maxflow();
 

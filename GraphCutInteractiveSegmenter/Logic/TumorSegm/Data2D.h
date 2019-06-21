@@ -253,12 +253,12 @@ Data2D<T>::~Data2D(void)
 template<typename T>
 void Data2D<T>::print(void) const
 {
-  cout << "The matrix is---->" << endl;
+  std::cout << "The matrix is---->" << std::endl;
   for (int y = 0; y < m_nRow; y++)
   {
     for (int x = 0; x < m_nCol; x++)
-      cout << m_pData[y * m_nCol + x] << ' ';
-    cout << endl;
+      std::cout << m_pData[y * m_nCol + x] << ' ';
+    std::cout << std::endl;
   }
 }
 

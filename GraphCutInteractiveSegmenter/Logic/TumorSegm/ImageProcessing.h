@@ -247,6 +247,7 @@ Data2D<bool> ImageProcessing::bwperim(const Data2D<T> & bw, uchar connectivity)
   {
   case 4:
     return bwperim4(bw);
+  default:
   case 8:
     return bwperim8(bw);
   }

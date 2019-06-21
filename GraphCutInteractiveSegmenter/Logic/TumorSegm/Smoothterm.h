@@ -18,7 +18,7 @@ namespace lliu
   template<typename T>
   std::pair<Data2D<double>, Data2D<double> > ComputeSmoothCostWhiteToDark(Data2D<T>& image, double dist, double variance, DIRECTION dir)
   {
-    pair<Data2D<double>, Data2D<double> > sm;
+    std::pair<Data2D<double>, Data2D<double> > sm;
     sm.first = Data2D<double>(image.getSize());
     sm.second = Data2D<double>(image.getSize());
 
