@@ -99,7 +99,7 @@ void Image3D<T>::load_info(const string& filename)
     string info_file = filename + "_info.txt";
 
     // open file
-    ifstream fin( info_file.c_str() );
+    std::ifstream fin( info_file.c_str() );
     smart_assert(fin.is_open(),"The info file is not found");
 
     // size of the data
